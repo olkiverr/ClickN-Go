@@ -141,3 +141,4 @@ To access the admin panel, log in with the default admin credentials (`admin@gma
 - [ ] Add second hand selling
 - [ ] PWA (Progressive Web App)  
 - [ ] Client Service
+- [ ] Add Automatic way to add part to the store (https://github.com/docyx/pc-part-dataset?tab=readme-ov-file)
