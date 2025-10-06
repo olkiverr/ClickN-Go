@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Add any environment variables your app needs here
+      # For example, if you re-add Google Auth, you'd put GOOGLE_CLIENT_ID here
+      NODE_ENV: development
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules # Exclude node_modules from host mount
+
+  db:
+    image: mariadb:10.6
+    environment:
+      MARIADB_ROOT_PASSWORD: ""
+      MARIADB_DATABASE: clickngo
+      MARIADB_USER: root
+      MARIADB_PASSWORD: ""
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
