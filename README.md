@@ -132,3 +132,12 @@ To access the admin panel, log in with the default admin credentials (`admin@gma
 *   This project is for educational purposes. Transactions and shipments are simulated and do not involve real money or logistics.
 *   Ensure your database server is running before executing `npm run db:init` or `npm start`.
 *   If you encounter `ER_TOO_LONG_KEY` errors during database initialization, ensure your MySQL/MariaDB server is configured to use `innodb_large_prefix=ON` and `innodb_file_format=Barracuda` or reduce the length of `VARCHAR` columns used in unique indexes (e.g., `googleId` if re-adding Google Auth).
+
+---
+
+## 🗺️ Roadmap
+
+### Objectifs
+- [ ] Add second hand selling
+- [ ] PWA (Progressive Web App)  
+- [ ] Client Service
