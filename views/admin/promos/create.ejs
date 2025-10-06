@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Promo - ClickN'Go Admin</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <%- include('../../partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">Create New Promotion</h2>
+        <form action="/admin/promos" method="POST" class="auth-form" style="max-width: 600px;">
+            <label for="code">Promo Code (leave blank for global promo)</label>
+            <input type="text" id="code" name="code">
+
+            <label for="type">Promotion Type</label>
+            <select id="type" name="type" required>
+                <option value="global">Global Promotion</option>
+                <option value="coupon">Coupon Code</option>
+                <option value="category">Category Discount</option>
+                <option value="product">Product Discount</option>
+            </select>
+
+            <label for="value">Discount Value</label>
+            <input type="number" id="value" name="value" step="0.01" required>
+
+            <label for="value_type">Value Type</label>
+            <select id="value_type" name="value_type" required>
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed Amount</option>
+            </select>
+
+            <label for="applies_to">Applies To (Category Name or Product ID, if applicable)</label>
+            <input type="text" id="applies_to" name="applies_to">
+
+            <label for="expiration_date">Expiration Date</label>
+            <input type="datetime-local" id="expiration_date" name="expiration_date">
+
+            <label for="usage_limit">Usage Limit (leave blank for unlimited)</label>
+            <input type="number" id="usage_limit" name="usage_limit">
+
+            <label for="is_active">Is Active</label>
+            <input type="checkbox" id="is_active" name="is_active" checked>
+
+            <button type="submit" class="btn-primary">Create Promo</button>
+        </form>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

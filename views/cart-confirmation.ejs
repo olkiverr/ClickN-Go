@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Added to Cart - ClickN'Go</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .confirmation-container {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .confirmation-container .product-card {
+            max-width: 400px;
+            margin: 2rem auto;
+        }
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <%- include('partials/header') %>
+    <main class="section-container confirmation-container">
+        <h2 class="section-title" style="color: var(--success-color);">Product Added to Cart!</h2>
+        <p class="section-subtitle">The product <strong><%= product.name %></strong> has been successfully added to your cart.</p>
+
+        <div class="product-card">
+            <a href="/products/<%= product.id %>">
+                <div class="product-image">
+                    <img src="<%= product.image_url || '/img/placeholder.jpg' %>" alt="<%= product.name %>">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title"><%= product.name %></h3>
+                    <div class="product-price-section">
+                        <div class="product-price">
+                            <span class="price-current">$<%= product.price %></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="confirmation-buttons">
+            <a href="/products" class="btn-secondary">Keep Shopping</a>
+            <a href="/cart" class="btn-primary">View Cart</a>
+        </div>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

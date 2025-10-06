@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - ClickN'Go</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <%- include('partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">My Account</h2>
+        <% if (session && session.userId) { %>
+            <div class="feature-card" style="text-align: left;">
+                <h3 class="feature-title">Account Information</h3>
+                <p><strong>Username:</strong> <%= session.username %></p>
+                <p><strong>Email:</strong> <%= session.email %></p>
+                <p><strong>Role:</strong> <%= session.role %></p>
+                <p><a href="/account/orders" class="btn-secondary" style="display: inline-block; margin-top: 1rem;">View Order History</a></p>
+            </div>
+        <% } else { %>
+            <p>You are not logged in. <a href="/login">Login here</a>.</p>
+        <% } %>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

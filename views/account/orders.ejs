@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - ClickN'Go</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .order-list-container {
+            padding: 2rem 0;
+        }
+        .order-card {
+            background: var(--secondary-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .order-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        .order-card p {
+            margin-bottom: 0.5rem;
+        }
+        .order-status-tracker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            position: relative;
+            padding: 1rem 0;
+        }
+        .order-status-tracker::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+        .order-status-tracker .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--accent-color); /* Active line color */
+            z-index: 0;
+            transition: width 0.5s ease-in-out;
+        }
+        .status-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .status-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-bg);
+            border-radius: 50%;
+            /* margin: 0 auto 0.5rem; */ /* Removed margin-bottom */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border: 2px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .status-step.active .status-dot {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        .status-step.active .status-text {
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem; /* Added margin-top */
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <%- include('../partials/header') %>
+    <main class="section-container order-list-container">
+        <h2 class="section-title">My Orders</h2>
+        <% if (orders.length === 0) { %>
+            <p>You have not placed any orders yet.</p>
+            <a href="/products" class="btn-primary">Start Shopping</a>
+        <% } else { %>
+            <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <h3>Order #<%= order.id %></h3>
+                    <p><strong>Total Price:</strong> $<%= parseFloat(order.total_price).toFixed(2) %></p>
+                    <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleDateString() %></p>
+                    <p><strong>Shipping Address:</strong> <%= order.shipping_address %>, <%= order.shipping_city %>, <%= order.shipping_zip %>, <%= order.shipping_country %></p>
+                    <p><strong>Tracking Number:</strong> <%= order.tracking_number || 'N/A' %></p>
+                    <p><strong>Current Status:</strong> <%= order.shipping_status %></p>
+
+                    <div class="order-status-tracker">
+                        <% const statuses = ['Pending', 'Shipped', 'Out for Delivery', 'Delivered']; %>
+                        <% const currentStatusIndex = statuses.indexOf(order.shipping_status); %>
+                        <div class="progress-line" style="width: <%= (currentStatusIndex / (statuses.length - 1)) * 100 %>%;"></div>
+                        <% statuses.forEach((status, index) => { %>
+                            <div class="status-step <%= index <= currentStatusIndex ? 'active' : '' %>">
+                                <div class="status-dot"><%= index + 1 %></div>
+                                <div class="status-text"><%= status %></div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

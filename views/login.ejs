@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ClickN'Go</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <%- include('partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">Log in to your account</h2>
+        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+            <div class="error-message"><%= errorMessage %></div>
+        <% } %>
+        <form action="/login" method="POST" class="auth-form">
+            <label for="loginIdentifier">Email or Username</label>
+            <input type="text" id="loginIdentifier" name="loginIdentifier" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn-primary">Log In</button>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-secondary);">If you don't have an account, please <a href="/register" style="color: var(--accent-color); text-decoration: none;">register</a>.</p>
+        </form>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

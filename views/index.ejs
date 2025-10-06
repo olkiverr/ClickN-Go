@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ClickN'Go | Hardware & Software</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <!-- Promo Banner - Easy to modify -->
+    <div class="promo-banner" id="promoBanner">
+        🔥 LIMITED OFFER: -20% on all processors with code PROC20 | Free shipping from 75€
+    </div>
+
+    <%- include('partials/header') %>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>Hardware & Licenses</h1>
+            <p class="hero-subtitle">Your specialized store for PC components and software licenses. Best prices, guaranteed quality.</p>
+            <div class="hero-buttons">
+                <a href="/products" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    View our products
+                </a>
+                <a href="#auctions" class="btn-secondary">Current Auctions</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">The best deals on computer hardware and software licenses</p>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <% products.forEach(product => { %>
+                    <div class="product-card">
+                        <a href="/products/<%= product.id %>">
+                            <div class="product-image">
+                                <img src="<%= product.image_url || '/img/placeholder.jpg' %>" alt="<%= product.name %>">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-category">PC Component</div>
+                                <h3 class="product-title"><%= product.name %></h3>
+                                <div class="product-price-section">
+                                    <div class="product-price">
+                                        <span class="price-current">$<%= product.price %></span>
+                                    </div>
+                                </div>
+                                <div class="product-actions">
+                                    <form action="/cart/add/<%= product.id %>" method="POST" style="display: flex; width: 100%;">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn-add-cart">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="9" cy="21" r="1"/>
+                                                <circle cx="20" cy="21" r="1"/>
+                                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                                            </svg>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="view-all-section">
+                <a href="/products" class="btn-view-all">View all products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Why ClickN'Go?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Certified Hardware</h3>
+                    <p class="feature-description">New and guaranteed PC components, selected from the best manufacturers (NVIDIA, AMD, Intel, etc.)</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Legal Licenses</h3>
+                    <p class="feature-description">100% authentic and legal Windows activation keys. Technical support included for all our licenses.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Auction System</h3>
+                    <p class="feature-description">Participate in our auctions to get high-end hardware at reduced prices. Secure and transparent.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
