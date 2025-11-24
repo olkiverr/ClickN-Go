@@ -21,4 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', 'light');
         }
     });
+
+    // Promo Banner Visibility Logic
+    const promoBanner = document.getElementById('promoBanner');
+    if (promoBanner) {
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 0) {
+                promoBanner.classList.add('promo-banner-hidden');
+            } else {
+                promoBanner.classList.remove('promo-banner-hidden');
+            }
+        });
+    }
 });

@@ -6,6 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
     "db:init": "node init-db.js",
+    "db:update": "node update-db.js",
+    "db:marketplace": "node update-db-marketplace.js",
+    "db:chat": "node update-db-chat.js",
     "db:drop": "node drop-db.js"
   },
   "keywords": [],

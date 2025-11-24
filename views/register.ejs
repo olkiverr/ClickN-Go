@@ -23,9 +23,26 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
 
-            <button type="submit" class="btn-primary">Register</button>
+            <div style="display: flex; align-items: center; margin-top: 1rem;">
+                <input type="checkbox" id="agreeToTos" name="agreeToTos" required style="margin-right: 0.5rem;">
+                <label for="agreeToTos">I agree to the <a href="/tos" target="_blank" style="color: var(--accent-color); text-decoration: none;">Terms of Service</a></label>
+            </div>
+
+            <button type="submit" class="btn-primary" id="registerButton" disabled>Register</button>
         </form>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const agreeToTosCheckbox = document.getElementById('agreeToTos');
+            const registerButton = document.getElementById('registerButton');
+
+            if (agreeToTosCheckbox && registerButton) {
+                agreeToTosCheckbox.addEventListener('change', () => {
+                    registerButton.disabled = !agreeToTosCheckbox.checked;
+                });
+            }
+        });
+    </script>
     <script src="/js/main.js"></script>
 </body>
 </html>

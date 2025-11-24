@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= item.title %> - Marketplace</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <%- include('../partials/header') %>
+    <main class="section-container">
+        <div class="product-detail-container" style="display: flex; gap: 2rem;">
+            <div class="product-detail-image" style="flex: 1;">
+                <img src="<%= item.image_url || '/img/placeholder.jpg' %>" alt="<%= item.title %>" style="width: 100%; border-radius: 12px;">
+            </div>
+            <div class="product-detail-info" style="flex: 1;">
+                <h1 class="section-title"><%= item.title %></h1>
+                <p style="margin-bottom: 1rem;"><%= item.description %></p>
+                <div class="product-price-section">
+                    <div class="product-price">
+                        <span class="price-current">$<%= item.price %></span>
+                    </div>
+                </div>
+                <p><strong>Price Type:</strong> <%= item.price_type %></p>
+                <p><strong>Delivery:</strong> <%= item.delivery_type %></p>
+                <% if (item.delivery_type === 'shipping' && item.delivery_fee) { %>
+                    <p><strong>Delivery Fee:</strong> $<%= item.delivery_fee %></p>
+                <% } %>
+
+                <div class="product-actions" style="margin-top: 2rem;">
+                    <% if (item.price_type === 'fixed') { %>
+                        <form action="/marketplace/<%= item.id %>/buy" method="POST">
+                            <button type="submit" class="btn-primary">Buy Now</button>
+                        </form>
+                    <% } else if (item.price_type === 'negotiable') { %>
+                        <form action="/marketplace/<%= item.id %>/offer" method="POST">
+                            <input type="number" name="offer_amount" placeholder="Your offer" required>
+                            <button type="submit" class="btn-primary">Make Offer</button>
+                        </form>
+                    <% } else if (item.price_type === 'bid') { %>
+                        <form action="/marketplace/<%= item.id %>/bid" method="POST">
+                            <input type="number" name="bid_amount" placeholder="Your bid" required>
+                            <button type="submit" class="btn-primary">Place Bid</button>
+                        </form>
+                    <% } %>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <a href="/chat/<%= item.id %>" class="btn-secondary">Chat with seller</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

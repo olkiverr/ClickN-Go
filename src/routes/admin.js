@@ -1,11 +1,10 @@
-
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
 // Admin Dashboard Route
 router.get('/dashboard', (req, res) => {
-    res.render('admin/dashboard');
+    res.render('admin/dashboard', { selectedTag: '' });
 });
 
 // --- Promos Management ---
@@ -14,7 +13,7 @@ router.get('/dashboard', (req, res) => {
 router.get('/promos', async (req, res) => {
     try {
         const [promos] = await pool.query('SELECT * FROM promotions ORDER BY created_at DESC');
-        res.render('admin/promos/index', { promos });
+        res.render('admin/promos/index', { promos, selectedTag: '' });
     } catch (error) {
         console.error('Error fetching promos:', error);
         res.status(500).send('Error fetching promotions.');
@@ -23,7 +22,7 @@ router.get('/promos', async (req, res) => {
 
 // Show create promo form
 router.get('/promos/create', (req, res) => {
-    res.render('admin/promos/create');
+    res.render('admin/promos/create', { selectedTag: '' });
 });
 
 // Create new promo
@@ -57,7 +56,7 @@ router.get('/promos/edit/:id', async (req, res) => {
         if (promos.length === 0) {
             return res.status(404).send('Promo not found.');
         }
-        res.render('admin/promos/edit', { promo: promos[0] });
+        res.render('admin/promos/edit', { promo: promos[0], selectedTag: '' });
     } catch (error) {
         console.error('Error fetching promo for edit:', error);
         res.status(500).send('Error fetching promotion.');
@@ -97,6 +96,42 @@ router.post('/promos/delete/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting promo:', error);
         res.status(500).send('Error deleting promotion.');
+    }
+});
+
+// --- Settings Management ---
+
+// Show settings page
+router.get('/settings', async (req, res) => {
+    try {
+        const [settingsRows] = await pool.query('SELECT * FROM settings');
+        const settings = settingsRows.reduce((acc, row) => {
+            acc[row.setting_key] = row.setting_value;
+            return acc;
+        }, {});
+        res.render('admin/settings', { settings, selectedTag: '' });
+    } catch (error) {
+        console.error('Error fetching settings:', error);
+        res.status(500).send('Error fetching settings.');
+    }
+});
+
+// Update settings
+router.post('/settings', async (req, res) => {
+    const { promo_banner_text, promo_banner_active } = req.body;
+    const settingsToUpdate = {
+        promo_banner_text: promo_banner_text,
+        promo_banner_active: promo_banner_active === 'on' ? 'true' : 'false'
+    };
+
+    try {
+        for (const [key, value] of Object.entries(settingsToUpdate)) {
+            await pool.query('UPDATE settings SET setting_value = ? WHERE setting_key = ?', [value, key]);
+        }
+        res.redirect('/admin/settings');
+    } catch (error) {
+        console.error('Error updating settings:', error);
+        res.status(500).send('Error updating settings.');
     }
 });
 

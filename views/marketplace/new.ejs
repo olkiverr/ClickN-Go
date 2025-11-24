@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Marketplace Listing - ClickN'Go</title>
+    <link rel="icon" href="/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body data-theme="dark">
+    <%- include('../partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">Create a new listing</h2>
+        <form action="/marketplace" method="POST" class="auth-form">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--accent-bg); color: var(--text-primary);"></textarea>
+
+            <label for="image_url">Image URL</label>
+            <input type="text" id="image_url" name="image_url">
+
+            <label for="price_type">Price Type</label>
+            <select id="price_type" name="price_type" class="search-bar" style="width: 100%;">
+                <option value="fixed">Fixed Price</option>
+                <option value="negotiable">Negotiable</option>
+                <option value="bid">Bidding</option>
+            </select>
+
+            <label for="price">Price (or starting bid)</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+
+            <label for="delivery_type">Delivery</label>
+            <select id="delivery_type" name="delivery_type" class="search-bar" style="width: 100%;">
+                <option value="shipping">Shipping</option>
+                <option value="pickup">Local Pickup</option>
+            </select>
+
+            <label for="delivery_fee">Delivery Fee (if applicable)</label>
+            <input type="number" id="delivery_fee" name="delivery_fee" step="0.01">
+
+            <button type="submit" class="btn-primary">Create Listing</button>
+        </form>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

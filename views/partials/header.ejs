@@ -1,5 +1,10 @@
 
 <header class="header">
+    <% if (typeof promo_banner_active !== 'undefined' && promo_banner_active && typeof promo_banner_text !== 'undefined' && promo_banner_text) { %>
+        <div class="promo-banner" id="promoBanner">
+            <%= promo_banner_text %>
+        </div>
+    <% } %>
     <div class="header-container">
         <!-- Logo -->
         <a href="/" class="logo">
@@ -117,13 +122,12 @@
 <nav class="nav-tabs">
     <div class="nav-container">
         <a href="/" class="nav-tab <%= currentPath === '/' ? 'active' : '' %>">Home</a>
-        <a href="/products" class="nav-tab <%= currentPath === '/products' ? 'active' : '' %>">Products</a>
-        <!-- Add more categories here -->
-        <a href="#" class="nav-tab">Processors</a>
-        <a href="#" class="nav-tab">Graphics Cards</a>
-        <a href="#" class="nav-tab">RAM Memory</a>
-        <a href="#" class="nav-tab">Storage</a>
-        <a href="#" class="nav-tab">Windows Licenses</a>
-        <a href="#" class="nav-tab">Auctions</a>
+        <a href="/products" class="nav-tab <%= (currentPath === '/products' && !selectedTag) ? 'active' : '' %>">Products</a>
+        <a href="/products?tag=CPU" class="nav-tab <%= (currentPath === '/products' && selectedTag === 'CPU') ? 'active' : '' %>">Processors</a>
+        <a href="/products?tag=GPU" class="nav-tab <%= (currentPath === '/products' && selectedTag === 'GPU') ? 'active' : '' %>">Graphics Cards</a>
+        <a href="/products?tag=RAM" class="nav-tab <%= (currentPath === '/products' && selectedTag === 'RAM') ? 'active' : '' %>">RAM Memory</a>
+        <a href="/products?tag=SSD" class="nav-tab <%= (currentPath === '/products' && selectedTag === 'SSD') ? 'active' : '' %>">Storage</a>
+        <a href="/products?tag=Software" class="nav-tab <%= (currentPath === '/products' && selectedTag === 'Software') ? 'active' : '' %>">Windows Licenses</a>
+        <a href="/marketplace" class="nav-tab <%= currentPath.startsWith('/marketplace') ? 'active' : '' %>">Marketplace</a>
     </div>
 </nav>

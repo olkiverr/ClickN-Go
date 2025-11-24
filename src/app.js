@@ -8,6 +8,7 @@ const pool = require('./db');
 const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const adminRoutes = require('./routes/admin');
+const marketplaceRoutes = require('./routes/marketplace');
 
 const app = express();
 const port = 3000;
@@ -29,6 +30,26 @@ app.use(session({
 app.use((req, res, next) => {
     res.locals.session = req.session;
     res.locals.currentPath = req.path; // Make current path available to templates
+    next();
+});
+
+// Middleware to fetch site settings
+app.use(async (req, res, next) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM settings');
+        res.locals.settings = rows.reduce((acc, row) => {
+            acc[row.setting_key] = row.setting_value;
+            return acc;
+        }, {});
+        // Specifically for the banner, to be used in the header partial
+        res.locals.promo_banner_text = res.locals.settings.promo_banner_text;
+        res.locals.promo_banner_active = res.locals.settings.promo_banner_active === 'true';
+    } catch (error) {
+        console.error('Error fetching settings for middleware:', error);
+        // Even if settings fail, continue rendering the site
+        res.locals.settings = {};
+        res.locals.promo_banner_active = false;
+    }
     next();
 });
 
@@ -57,10 +78,14 @@ const checkForceChange = (req, res, next) => {
 // --- Routes ---
 
 // Unprotected routes
+app.get('/tos', (req, res) => {
+    res.render('tos', { selectedTag: '' });
+});
+
 app.get('/', checkForceChange, async (req, res) => {
     try {
         const [products] = await pool.query('SELECT * FROM products');
-        res.render('index', { products });
+        res.render('index', { products, selectedTag: '' });
     } catch (error) {
         console.error('Error fetching products for homepage:', error);
         res.status(500).send('Error fetching products.');
@@ -70,11 +95,11 @@ app.get('/', checkForceChange, async (req, res) => {
 app.get('/login', (req, res) => {
     const errorMessage = req.session.error;
     delete req.session.error; // Clear the error after displaying
-    res.render('login', { errorMessage });
+    res.render('login', { errorMessage, selectedTag: '' });
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', { selectedTag: '' });
 });
 
 app.post('/register', async (req, res) => {
@@ -141,7 +166,7 @@ app.get('/force-change', requireLogin, (req, res) => {
     if (!req.session.mustChangePassword) {
         return res.redirect('/');
     }
-    res.render('force-change');
+    res.render('force-change', { selectedTag: '' });
 });
 
 app.post('/force-change', requireLogin, async (req, res) => {
@@ -177,12 +202,13 @@ app.use(requireLogin, checkForceChange);
 
 app.use('/products', productRoutes);
 app.use('/cart', requireLogin, cartRoutes);
+app.use('/marketplace', marketplaceRoutes);
 
 // Admin routes
 app.use('/admin', requireLogin, requireAdmin, checkForceChange, adminRoutes);
 
 app.get('/account', requireLogin, (req, res) => { // Protect account route
-    res.render('account');
+    res.render('account', { selectedTag: '' });
 });
 
 app.get('/account/orders', requireLogin, async (req, res) => {
@@ -191,7 +217,7 @@ app.get('/account/orders', requireLogin, async (req, res) => {
             'SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC',
             [req.session.userId]
         );
-        res.render('account/orders', { orders });
+        res.render('account/orders', { orders, selectedTag: '' });
     } catch (error) {
         console.error('Error fetching user orders:', error);
         res.status(500).send('Error fetching orders.');
