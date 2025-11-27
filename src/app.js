@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const { Server } = require("socket.io");
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const pool = require('./db');
@@ -9,8 +11,11 @@ const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const adminRoutes = require('./routes/admin');
 const marketplaceRoutes = require('./routes/marketplace');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 const port = 3000;
 
 // View Engine Setup
@@ -20,12 +25,19 @@ app.set('views', path.join(__dirname, '..', 'views'));
 // Middleware
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
+const sessionMiddleware = session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
-}));
+});
+app.use(sessionMiddleware);
+
+// Share session with socket.io
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next);
+});
+
 
 app.use((req, res, next) => {
     res.locals.session = req.session;
@@ -203,6 +215,8 @@ app.use(requireLogin, checkForceChange);
 app.use('/products', productRoutes);
 app.use('/cart', requireLogin, cartRoutes);
 app.use('/marketplace', marketplaceRoutes);
+app.use('/chat', chatRoutes);
+
 
 // Admin routes
 app.use('/admin', requireLogin, requireAdmin, checkForceChange, adminRoutes);
@@ -224,6 +238,173 @@ app.get('/account/orders', requireLogin, async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+// GET route to show the edit account form
+app.get('/account/edit', requireLogin, async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT username, email FROM users WHERE id = ?', [req.session.userId]);
+        if (rows.length === 0) {
+            return res.status(404).send('User not found.');
+        }
+        res.render('account/edit', { user: rows[0], errorMessage: '', selectedTag: '' });
+    } catch (error) {
+        console.error('Error fetching user for edit:', error);
+        res.status(500).send('Error loading edit page.');
+    }
+});
+
+// POST route to update user account information
+app.post('/account/edit', requireLogin, async (req, res) => {
+    const { username, email, password, new_password } = req.body;
+    const userId = req.session.userId;
+
+    try {
+        const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+        const user = rows[0];
+
+        // Verify current password
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.render('account/edit', { user, errorMessage: 'Incorrect current password.', selectedTag: '' });
+        }
+
+        let updateQuery = 'UPDATE users SET username = ?, email = ?';
+        const queryParams = [username, email];
+
+        // If a new password is provided, hash it and add it to the query
+        if (new_password) {
+            const hashedPassword = await bcrypt.hash(new_password, 10);
+            updateQuery += ', password = ?';
+            queryParams.push(hashedPassword);
+        }
+
+        updateQuery += ' WHERE id = ?';
+        queryParams.push(userId);
+
+        await pool.query(updateQuery, queryParams);
+
+        // Update session
+        req.session.username = username;
+        req.session.email = email;
+
+        res.redirect('/account');
+
+    } catch (error) {
+        console.error('Error updating account:', error);
+        // Handle potential duplicate username/email
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.render('account/edit', { user: { username, email }, errorMessage: 'Username or email already taken.', selectedTag: '' });
+        }
+        res.status(500).send('Error updating account.');
+    }
+});
+
+
+// GET route to show the edit account form
+app.get('/account/edit', requireLogin, async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT username, email FROM users WHERE id = ?', [req.session.userId]);
+        if (rows.length === 0) {
+            return res.status(404).send('User not found.');
+        }
+        res.render('account/edit', { user: rows[0], errorMessage: '', selectedTag: '' });
+    } catch (error) {
+        console.error('Error fetching user for edit:', error);
+        res.status(500).send('Error loading edit page.');
+    }
+});
+
+// POST route to update user account information
+app.post('/account/edit', requireLogin, async (req, res) => {
+    const { username, email, password, new_password } = req.body;
+    const userId = req.session.userId;
+
+    try {
+        const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+        const user = rows[0];
+
+        // Verify current password
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.render('account/edit', { user, errorMessage: 'Incorrect current password.', selectedTag: '' });
+        }
+
+        let updateQuery = 'UPDATE users SET username = ?, email = ?';
+        const queryParams = [username, email];
+
+        // If a new password is provided, hash it and add it to the query
+        if (new_password) {
+            const hashedPassword = await bcrypt.hash(new_password, 10);
+            updateQuery += ', password = ?';
+            queryParams.push(hashedPassword);
+        }
+
+        updateQuery += ' WHERE id = ?';
+        queryParams.push(userId);
+
+        await pool.query(updateQuery, queryParams);
+
+        // Update session
+        req.session.username = username;
+        req.session.email = email;
+
+        res.redirect('/account');
+
+    } catch (error) {
+        console.error('Error updating account:', error);
+        // Handle potential duplicate username/email
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.render('account/edit', { user: { username, email }, errorMessage: 'Username or email already taken.', selectedTag: '' });
+        }
+        res.status(500).send('Error updating account.');
+    }
+});
+
+
+// Socket.IO logic
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    socket.on('join_chat', (itemId) => {
+        socket.join(itemId);
+        console.log(`User joined chat for item: ${itemId}`);
+    });
+
+    socket.on('send_message', async (data) => {
+        const { itemId, message } = data;
+        const session = socket.request.session;
+        const senderId = session.userId;
+        const senderUsername = session.username;
+
+
+        if (!senderId) {
+            // Handle case where user is not logged in
+            return;
+        }
+
+        try {
+            // Save message to the database
+            await pool.query(
+                'INSERT INTO chat_messages (item_id, sender_id, message) VALUES (?, ?, ?)',
+                [itemId, senderId, message]
+            );
+
+            // Broadcast the message to everyone in the item's chat room
+            io.to(itemId).emit('receive_message', {
+                message: message,
+                sender_id: senderId,
+                username: senderUsername
+            });
+        } catch (error) {
+            console.error('Error saving or broadcasting chat message:', error);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
+
+server.listen(port, () => {
     console.log(`ClickN'Go server listening at http://localhost:${port}`);
 });

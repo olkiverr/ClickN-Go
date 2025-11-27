@@ -2,10 +2,21 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
+// Import sub-routers
+const userRoutes = require('./admin/users');
+const productRoutes = require('./admin/products');
+const orderRoutes = require('./admin/orders');
+
 // Admin Dashboard Route
 router.get('/dashboard', (req, res) => {
     res.render('admin/dashboard', { selectedTag: '' });
 });
+
+// Mount sub-routers
+router.use('/users', userRoutes);
+router.use('/products', productRoutes);
+router.use('/orders', orderRoutes);
+
 
 // --- Promos Management ---
 
@@ -96,6 +107,31 @@ router.post('/promos/delete/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting promo:', error);
         res.status(500).send('Error deleting promotion.');
+    }
+});
+
+// GET /admin/promos/:id/orders - View orders that used a specific promo
+router.get('/promos/:id/orders', async (req, res) => {
+    const promoId = req.params.id;
+    try {
+        const [promoRows] = await pool.query('SELECT * FROM promotions WHERE id = ?', [promoId]);
+        if (promoRows.length === 0) {
+            return res.status(404).send('Promotion not found.');
+        }
+        const promo = promoRows[0];
+
+        const [orders] = await pool.query(`
+            SELECT o.id, o.user_id, u.username, o.total_amount, o.status, o.created_at
+            FROM orders o
+            JOIN users u ON o.user_id = u.id
+            WHERE o.promotion_id = ?
+            ORDER BY o.created_at DESC
+        `, [promoId]);
+
+        res.render('admin/promos/promo-orders', { promo, orders, selectedTag: '' });
+    } catch (error) {
+        console.error('Error fetching orders for promo:', error);
+        res.status(500).send('Error fetching orders.');
     }
 });
 

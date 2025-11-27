@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Admin</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <main class="section-container">
+        <h1 class="section-title">User Management</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.username %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.role %></td>
+                        <td>
+                            <a href="/admin/users/edit/<%= user.id %>" class="btn-primary">Edit</a>
+                            <form action="/admin/users/delete/<%= user.id %>" method="POST" style="display: inline;">
+                                <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Admin</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <main class="section-container">
+        <h1 class="section-title">Order #<%= order.id %></h1>
+        <div class="order-details">
+            <p><strong>Status:</strong> <%= order.status %></p>
+            <p><strong>Total Amount:</strong> $<%= order.total_amount %></p>
+            <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleString() %></p>
+            
+            <h2>Items</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td><%= item.name %></td>
+                            <td><%= item.quantity %></td>
+                            <td>$<%= item.price %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+
+            <h2>Update Status</h2>
+            <form action="/admin/orders/status/<%= order.id %>" method="POST">
+                <select name="status">
+                    <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                    <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                    <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                </select>
+                <button type="submit" class="btn-primary">Update Status</button>
+            </form>
+        </div>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

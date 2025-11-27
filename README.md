@@ -54,6 +54,20 @@ ClickN'Go is a web-based e-commerce platform designed for selling PC parts, Wind
 
 ## Setup and Installation
 
+### 0. Environment Variables
+Create a `.env` file in the root directory of the project with the following content, replacing the values with your database credentials:
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_DATABASE=clickngo
+```
+*   **DB_HOST**: Your database host (e.g., `localhost`).
+*   **DB_USER**: Your database username.
+*   **DB_PASSWORD**: Your database password.
+*   **DB_DATABASE**: The name of your database.
+
 ### Prerequisites
 *   Node.js (LTS version recommended)
 *   npm (Node Package Manager)

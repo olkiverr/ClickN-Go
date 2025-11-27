@@ -1,17 +1,18 @@
 
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
-const dbName = 'clickngo';
+const dbName = process.env.DB_DATABASE;
 
 (async () => {
     let conn;
     try {
-        conn = await mysql.createConnection({ host: 'localhost', user: 'root', password: '' });
+        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD });
         await conn.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
         await conn.end();
 
-        conn = await mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: dbName });
+        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: dbName });
         console.log(`Connected to database '${dbName}'.`);
 
         // Create/update users table
@@ -44,40 +45,6 @@ const dbName = 'clickngo';
         await conn.query(productsTableSQL);
         console.log("Table 'products' created or already exists.");
 
-        // Create orders table
-        const ordersTableSQL = `
-            CREATE TABLE IF NOT EXISTS orders (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                total_price DECIMAL(10, 2) NOT NULL,
-                shipping_address TEXT,
-                shipping_city VARCHAR(255),
-                shipping_zip VARCHAR(20),
-                shipping_country VARCHAR(255),
-                tracking_number VARCHAR(255),
-                shipping_status VARCHAR(50) DEFAULT 'Pending',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            );
-        `;
-        await conn.query(ordersTableSQL);
-        console.log("Table 'orders' created or already exists.");
-
-        // Create order_items table
-        const orderItemsTableSQL = `
-            CREATE TABLE IF NOT EXISTS order_items (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                order_id INT NOT NULL,
-                product_id INT NOT NULL,
-                quantity INT NOT NULL,
-                price DECIMAL(10, 2) NOT NULL,
-                FOREIGN KEY (order_id) REFERENCES orders(id),
-                FOREIGN KEY (product_id) REFERENCES products(id)
-            );
-        `;
-        await conn.query(orderItemsTableSQL);
-        console.log("Table 'order_items' created or already exists.");
-
         // Create promotions table
         const promotionsTableSQL = `
             CREATE TABLE IF NOT EXISTS promotions (
@@ -98,6 +65,101 @@ const dbName = 'clickngo';
         await conn.query(promotionsTableSQL);
         console.log("Table 'promotions' created or already exists.");
 
+        // Create orders table
+        const ordersTableSQL = `
+            CREATE TABLE IF NOT EXISTS orders (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                total_amount DECIMAL(10, 2) NOT NULL,
+                discount_amount DECIMAL(10, 2) DEFAULT 0.00,
+                promotion_id INT NULL,
+                shipping_address TEXT,
+                shipping_city VARCHAR(255),
+                shipping_zip VARCHAR(20),
+                shipping_country VARCHAR(255),
+                tracking_number VARCHAR(255),
+                status VARCHAR(50) DEFAULT 'Pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (promotion_id) REFERENCES promotions(id)
+            );
+        `;
+        await conn.query(ordersTableSQL);
+        console.log("Table 'orders' created or already exists.");
+
+        // Create order_items table
+        const orderItemsTableSQL = `
+            CREATE TABLE IF NOT EXISTS order_items (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                order_id INT NOT NULL,
+                product_id INT NOT NULL,
+                quantity INT NOT NULL,
+                price DECIMAL(10, 2) NOT NULL,
+                FOREIGN KEY (order_id) REFERENCES orders(id),
+                FOREIGN KEY (product_id) REFERENCES products(id)
+            );
+        `;
+        await conn.query(orderItemsTableSQL);
+        console.log("Table 'order_items' created or already exists.");
+
+        // Create marketplace_items table
+        const marketplaceItemsTableSQL = `
+            CREATE TABLE IF NOT EXISTS marketplace_items (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                image_url VARCHAR(255),
+                price_type ENUM('fixed', 'negotiable', 'bid') NOT NULL DEFAULT 'fixed',
+                price DECIMAL(10, 2) NULL,
+                delivery_type ENUM('pickup', 'shipping') NOT NULL DEFAULT 'pickup',
+                delivery_fee DECIMAL(10, 2) NULL,
+                status ENUM('available', 'sold', 'pending') NOT NULL DEFAULT 'available',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+        `;
+        await conn.query(marketplaceItemsTableSQL);
+        console.log("Table 'marketplace_items' created or already exists.");
+
+        // Create chat_messages table
+        const chatMessagesTableSQL = `
+            CREATE TABLE IF NOT EXISTS chat_messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                item_id INT NOT NULL,
+                sender_id INT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (item_id) REFERENCES marketplace_items(id),
+                FOREIGN KEY (sender_id) REFERENCES users(id)
+            );
+        `;
+        await conn.query(chatMessagesTableSQL);
+        console.log("Table 'chat_messages' created or already exists.");
+
+        // Create settings table
+        const settingsTableSQL = `
+            CREATE TABLE IF NOT EXISTS settings (
+                setting_key VARCHAR(255) PRIMARY KEY,
+                setting_value TEXT
+            );
+        `;
+        await conn.query(settingsTableSQL);
+        console.log("Table 'settings' created or already exists.");
+
+        // Insert default settings if not present
+        const [settingsRows] = await conn.query('SELECT COUNT(*) AS count FROM settings');
+        if (settingsRows[0].count === 0) {
+            await conn.query(
+                `INSERT INTO settings (setting_key, setting_value) VALUES ('promo_banner_text', 'Welcome to ClickN''Go!')`
+            );
+            await conn.query(
+                `INSERT INTO settings (setting_key, setting_value) VALUES ('promo_banner_active', 'true')`
+            );
+            console.log('Default settings inserted.');
+        } else {
+            console.log('Settings already exist.');
+        }
 
         // Create admin user if it doesn't exist
         const [adminRows] = await conn.query('SELECT * FROM users WHERE username = ?', ['admin']);
@@ -129,6 +191,24 @@ const dbName = 'clickngo';
             console.log('Sample products inserted.');
         }
 
+        // Add sample marketplace items if the table is empty
+        const [marketplaceItemRows] = await conn.query('SELECT id FROM marketplace_items');
+        if (marketplaceItemRows.length === 0) {
+            const [userRows] = await conn.query('SELECT id FROM users WHERE username = ?', ['admin']);
+            const adminUserId = userRows.length > 0 ? userRows[0].id : 1; // Fallback to 1 if admin not found
+
+            const sampleMarketplaceItems = [
+                [adminUserId, 'Used Gaming PC', 'A powerful gaming PC with an RTX 3080. Lightly used.', '/img/used_pc.jpg', 'negotiable', 1200.00, 'pickup', null],
+                [adminUserId, 'Vintage Camera', 'Classic film camera, great condition.', '/img/vintage_camera.jpg', 'fixed', 250.00, 'shipping', 15.00],
+                [adminUserId, 'Designer Watch', 'Luxury watch, almost new.', '/img/watch.jpg', 'bid', 800.00, 'shipping', 10.00]
+            ];
+            await conn.query(
+                'INSERT INTO marketplace_items (user_id, title, description, image_url, price_type, price, delivery_type, delivery_fee) VALUES ?',
+                [sampleMarketplaceItems]
+            );
+            console.log('Sample marketplace items inserted.');
+        }
+
     } catch (error) {
         console.error('Error initializing database:', error);
     } finally {
@@ -138,3 +218,4 @@ const dbName = 'clickngo';
         }
     }
 })();
+

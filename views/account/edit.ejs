@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Account - ClickN'Go</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">Edit Account Information</h2>
+        <form action="/account/edit" method="POST" class="auth-form">
+            <% if (errorMessage) { %>
+                <p style="color: red;"><%= errorMessage %></p>
+            <% } %>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="<%= user.username %>" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<%= user.email %>" required>
+            </div>
+            <hr>
+            <p>To change your password, enter your current password and a new one. Otherwise, leave the new password field blank.</p>
+            <div class="form-group">
+                <label for="password">Current Password (required to save changes)</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password (optional)</label>
+                <input type="password" id="new_password" name="new_password">
+            </div>
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </form>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>

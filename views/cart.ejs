@@ -32,9 +32,35 @@
                     </div>
                 <% }) %>
             </div>
-            <div class="cart-total" style="text-align: right; margin-top: 2rem; font-size: 1.8rem; font-weight: bold;">
-                <strong>Cart Total: $<%= totalPrice.toFixed(2) %></strong>
+            <div class="cart-summary" style="text-align: right; margin-top: 2rem;">
+                <div class="cart-total" style="font-size: 1.2rem;">
+                    <strong>Subtotal: $<%= totalPrice.toFixed(2) %></strong>
+                </div>
+
+                <% if (promo) { %>
+                    <div class="cart-discount" style="color: green; font-size: 1.2rem;">
+                        <strong>Discount (<%= promo.code %>): -$<%= discountAmount.toFixed(2) %></strong>
+                    </div>
+                <% } %>
+
+                <div class="cart-final-price" style="font-size: 1.8rem; font-weight: bold; margin-top: 0.5rem;">
+                    <strong>Total: $<%= finalPrice.toFixed(2) %></strong>
+                </div>
             </div>
+
+            <div class="promo-section" style="text-align: right; margin-top: 1.5rem;">
+                <form action="/cart/apply-promo" method="POST">
+                    <input type="text" name="promoCode" placeholder="Enter Promo Code" style="padding: 0.5rem;">
+                    <button type="submit" class="btn-secondary">Apply</button>
+                </form>
+                <% if (promoError) { %>
+                    <p style="color: red; margin-top: 0.5rem;"><%= promoError %></p>
+                <% } %>
+                <% if (promoSuccess) { %>
+                    <p style="color: green; margin-top: 0.5rem;"><%= promoSuccess %></p>
+                <% } %>
+            </div>
+
             <div style="text-align: right; margin-top: 1rem;">
                 <a href="/cart/checkout" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">Proceed to Checkout</a>
             </div>

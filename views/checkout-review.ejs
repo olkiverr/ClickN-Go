@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Your Order - ClickN'Go</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main class="section-container">
+        <h2 class="section-title">Review Your Order</h2>
+        
+        <div class="order-summary">
+            <h3>Items</h3>
+            <% items.forEach(item => { %>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3 class="product-title"><%= item.product.name %></h3>
+                        <p>Quantity: <%= item.quantity %></p>
+                        <p>Price: $<%= item.itemTotal.toFixed(2) %></p>
+                    </div>
+                </div>
+            <% }) %>
+
+            <h3>Shipping Information</h3>
+            <p><%= shippingInfo.shipping_address %></p>
+            <p><%= shippingInfo.shipping_city %>, <%= shippingInfo.shipping_zip %></p>
+            <p><%= shippingInfo.shipping_country %></p>
+
+            <h3>Total</h3>
+            <p>Subtotal: $<%= totalPrice.toFixed(2) %></p>
+            <% if (promo) { %>
+                <p>Discount (<%= promo.code %>): -$<%= discountAmount.toFixed(2) %></p>
+            <% } %>
+            <p><strong>Total: $<%= finalPrice.toFixed(2) %></strong></p>
+        </div>
+
+        <form action="/cart/checkout/confirm" method="POST">
+            <button type="submit" class="btn-primary">Confirm Order</button>
+        </form>
+    </main>
+    <script src="/js/main.js"></script>
+</body>
+</html>
