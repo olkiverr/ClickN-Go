@@ -1,46 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders for Promo Code: <%= promo.code %> - Admin</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
-    <%- include('../../partials/header') %>
-    <main class="section-container">
-        <h1 class="section-title">Orders for Promo Code: <%= promo.code %></h1>
-        <% if (orders.length > 0) { %>
-            <table class="table">
-                <thead>
+<main class="section-container">
+    <h1 class="section-title">Orders for Promo Code: <%= promo.code %></h1>
+    <% if (orders.length > 0) { %>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% orders.forEach(order => { %>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
+                        <td><%= order.id %></td>
+                        <td><%= order.username %></td>
+                        <td>$<%= order.total_amount %></td>
+                        <td><%= order.status %></td>
+                        <td><%= new Date(order.created_at).toLocaleDateString() %></td>
+                        <td>
+                            <a href="/admin/orders/<%= order.id %>" class="btn-primary">View Details</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% orders.forEach(order => { %>
-                        <tr>
-                            <td><%= order.id %></td>
-                            <td><%= order.username %></td>
-                            <td>$<%= order.total_amount %></td>
-                            <td><%= order.status %></td>
-                            <td><%= new Date(order.created_at).toLocaleDateString() %></td>
-                            <td>
-                                <a href="/admin/orders/<%= order.id %>" class="btn-primary">View Details</a>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        <% } else { %>
-            <p>No orders have used this promotion yet.</p>
-        <% } %>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No orders have used this promotion yet.</p>
+    <% } %>
+</main>

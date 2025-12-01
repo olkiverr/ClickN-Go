@@ -12,14 +12,17 @@ const cartRoutes = require('./routes/cart');
 const adminRoutes = require('./routes/admin');
 const marketplaceRoutes = require('./routes/marketplace');
 const chatRoutes = require('./routes/chat');
+const ejsLayouts = require('express-ejs-layouts');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // View Engine Setup
 app.set('view engine', 'ejs');
+app.use(ejsLayouts);
+
 app.set('views', path.join(__dirname, '..', 'views'));
 
 // Middleware

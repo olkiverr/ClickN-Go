@@ -1,31 +1,17 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Your Credentials - ClickN'Go</title>
-    <link rel="icon" href="/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-theme="dark">
-    <main class="section-container">
-        <h2 class="section-title">Important: Update Your Credentials</h2>
-        <p class="section-subtitle">For security reasons, you must change your default credentials before you can access the site.</p>
-        <form action="/force-change" method="POST" class="auth-form">
-            <label for="username">New Username</label>
-            <input type="text" id="username" name="username" value="<%= session.username %>" required>
+<main class="section-container">
+    <h2 class="section-title">Important: Update Your Credentials</h2>
+    <p class="section-subtitle">For security reasons, you must change your default credentials before you can access the site.</p>
+    <form action="/force-change" method="POST" class="auth-form">
+        <label for="username">New Username</label>
+        <input type="text" id="username" name="username" value="<%= session.username %>" required>
 
-            <label for="email">New Email</label>
-            <input type="email" id="email" name="email" value="<%= session.email %>" required>
+        <label for="email">New Email</label>
+        <input type="email" id="email" name="email" value="<%= session.email %>" required>
 
-            <label for="password">New Password</label>
-            <input type="password" id="password" name="password" required>
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password" required>
 
-            <button type="submit" class="btn-primary">Update and Continue</button>
-        </form>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+        <button type="submit" class="btn-primary">Update and Continue</button>
+    </form>
+</main>

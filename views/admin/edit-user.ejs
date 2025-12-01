@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User - Admin</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
-    <%- include('../partials/header') %>
-    <main class="section-container">
-        <h1 class="section-title">Edit User</h1>
-        <form action="/admin/users/edit/<%= user.id %>" method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="<%= user.username %>" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<%= user.email %>" required>
-            </div>
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role">
-                    <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
-                    <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-primary">Save Changes</button>
-        </form>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+<main class="section-container">
+    <h1 class="section-title">Edit User</h1>
+    <form action="/admin/users/edit/<%= user.id %>" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="<%= user.username %>" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="<%= user.email %>" required>
+        </div>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role">
+                <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+            </select>
+        </div>
+        <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+</main>

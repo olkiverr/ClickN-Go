@@ -22,8 +22,13 @@ router.get('/new', requireLogin, (req, res) => {
 
 // Handle creation of a new listing
 router.post('/', requireLogin, async (req, res) => {
-    const { title, description, image_url, price_type, price, delivery_type, delivery_fee } = req.body;
+    let { title, description, image_url, price_type, price, delivery_type, delivery_fee } = req.body;
     const userId = req.session.userId;
+
+    // Convert empty string for delivery_fee to null
+    if (delivery_fee === '') {
+        delivery_fee = null;
+    }
 
     try {
         await pool.query(
@@ -68,9 +73,14 @@ router.get('/edit/:id', requireLogin, async (req, res) => {
 
 // Handle updating of an existing listing
 router.post('/edit/:id', requireLogin, async (req, res) => {
-    const { title, description, image_url, price_type, price, delivery_type, delivery_fee } = req.body;
+    let { title, description, image_url, price_type, price, delivery_type, delivery_fee } = req.body;
     const itemId = req.params.id;
     const userId = req.session.userId;
+
+    // Convert empty string for delivery_fee to null
+    if (delivery_fee === '') {
+        delivery_fee = null;
+    }
 
     try {
         const [items] = await pool.query('SELECT * FROM marketplace_items WHERE id = ? AND user_id = ?', [itemId, userId]);

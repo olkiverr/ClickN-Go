@@ -1,17 +1,4 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - ClickN'Go | Hardware & Software</title>
-    <link rel="icon" href="/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-theme="dark">
-    <%- include('partials/header') %>
-
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-container">
@@ -26,7 +13,7 @@
                     </svg>
                     View our products
                 </a>
-                <a href="#auctions" class="btn-secondary">Current Auctions</a>
+                <a href="/marketplace" class="btn-secondary">Marketplace</a>
             </div>
         </div>
     </section>
@@ -55,7 +42,7 @@
                                     </div>
                                 </div>
                                 <div class="product-actions">
-                                    <form action="/cart/add/<%= product.id %>" method="POST" style="display: flex; width: 100%;">
+                                    <form action="/cart/add/<%= product.id %>" method="POST" class="search-form">
                                         <input type="hidden" name="quantity" value="1">
                                         <button type="submit" class="btn-add-cart">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -118,7 +105,3 @@
             </div>
         </div>
     </section>
-
-    <script src="/js/main.js"></script>
-</body>
-</html>

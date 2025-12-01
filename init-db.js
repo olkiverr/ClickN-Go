@@ -8,11 +8,11 @@ const dbName = process.env.DB_DATABASE;
 (async () => {
     let conn;
     try {
-        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD });
+        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, port: process.env.DB_PORT });
         await conn.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
         await conn.end();
 
-        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: dbName });
+        conn = await mysql.createConnection({ host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: dbName, port: process.env.DB_PORT });
         console.log(`Connected to database '${dbName}'.`);
 
         // Create/update users table
@@ -37,6 +37,7 @@ const dbName = process.env.DB_DATABASE;
                 name VARCHAR(255) NOT NULL,
                 description TEXT,
                 price DECIMAL(10, 2) NOT NULL,
+                stock INT NOT NULL DEFAULT 0,
                 image_url VARCHAR(255),
                 tags VARCHAR(255) DEFAULT '',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -178,14 +179,14 @@ const dbName = process.env.DB_DATABASE;
         const [productRows] = await conn.query('SELECT id FROM products');
         if (productRows.length === 0) {
             const sampleProducts = [
-                ['Intel Core i9-13900K', 'The latest and greatest CPU from Intel.', 589.99, '/img/cpu.jpg', 'CPU,Intel,Gaming'],
-                ['NVIDIA GeForce RTX 4090', 'The most powerful GPU on the market.', 1599.99, '/img/gpu.jpg', 'GPU,NVIDIA,Gaming'],
-                ['Corsair Vengeance 32GB DDR5', 'High speed DDR5 RAM for modern systems.', 150.00, '/img/ram.jpg', 'RAM,DDR5,Memory'],
-                ['Samsung 980 Pro 2TB NVMe SSD', 'Lightning fast storage for your games and applications.', 179.99, '/img/ssd.jpg', 'SSD,NVMe,Storage'],
-                ['Windows 11 Pro Key', 'Official license key for Windows 11 Pro.', 199.99, '/img/win.jpg', 'Software,OS,Windows']
+                ['Intel Core i9-13900K', 'The latest and greatest CPU from Intel.', 589.99, 10, '/img/cpu.jpg', 'CPU,Intel,Gaming'],
+                ['NVIDIA GeForce RTX 4090', 'The most powerful GPU on the market.', 1599.99, 10, '/img/gpu.jpg', 'GPU,NVIDIA,Gaming'],
+                ['Corsair Vengeance 32GB DDR5', 'High speed DDR5 RAM for modern systems.', 150.00, 10, '/img/ram.jpg', 'RAM,DDR5,Memory'],
+                ['Samsung 980 Pro 2TB NVMe SSD', 'Lightning fast storage for your games and applications.', 179.99, 10, '/img/ssd.jpg', 'SSD,NVMe,Storage'],
+                ['Windows 11 Pro Key', 'Official license key for Windows 11 Pro.', 199.99, 10, '/img/win.jpg', 'Software,OS,Windows']
             ];
             await conn.query(
-                'INSERT INTO products (name, description, price, image_url, tags) VALUES ?',
+                'INSERT INTO products (name, description, price, stock, image_url, tags) VALUES ?',
                 [sampleProducts]
             );
             console.log('Sample products inserted.');

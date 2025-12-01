@@ -12,6 +12,13 @@
             transition: var(--transition);
             min-height: 100vh;
             line-height: 1.6;
+            display: flex; /* Added for sticky footer */
+            flex-direction: column; /* Added for sticky footer */
+        }
+
+        /* General main container styling */
+        main.container {
+            flex-grow: 1; /* Allows main content to expand and push footer down */
         }
 
         /* Header Styles */
@@ -763,3 +770,602 @@
             padding: 0.75rem;
             font-size: 0.9rem;
         }
+
+/* Footer Styles */
+.footer {
+    background: var(--secondary-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: auto;
+}
+
+/* Styles extracted from header.ejs */
+.logo-icon img {
+    height: 36px;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+}
+
+.filter-dropdown .filter-summary-btn { /* for summary element */
+    margin-left: 0.5rem;
+    height: 46px;
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-button-header { /* for the search button next to input */
+    margin-left: 0.5rem;
+    height: 46px;
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-content .search-bar-mb-half { /* for search bars with margin-bottom */
+    margin-bottom: 0.5rem;
+}
+
+.dropdown-content .btn-primary-mt-one { /* for btn-primary with margin-top */
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Styles for products.ejs filter bar */
+.filter-bar-products {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--secondary-bg);
+    border-radius: 8px;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-form-products {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+.filter-search-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-select {
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-price-input {
+    flex: 1;
+    min-width: 100px;
+}
+
+.filter-submit-button {
+    flex: 0 0 auto;
+}
+
+/* Styles for product-detail.ejs */
+.product-detail-form {
+    display: flex;
+    width: 100%;
+}
+
+.product-detail-quantity-input {
+    width: 80px;
+    margin-right: 1rem;
+}
+
+/* Styles for cart.ejs */
+.cart-product-card {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.cart-product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 1.5rem;
+}
+
+.cart-product-info {
+    flex-grow: 1;
+}
+
+.cart-item-actions {
+    margin-left: auto;
+    text-align: right;
+}
+
+.cart-remove-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.cart-summary {
+    text-align: right;
+    margin-top: 2rem;
+}
+
+.cart-total {
+    font-size: 1.2rem;
+}
+
+.cart-discount {
+    color: green;
+    font-size: 1.2rem;
+}
+
+.cart-final-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.promo-section {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+.promo-section input[type="text"] {
+    padding: 0.5rem;
+}
+
+.promo-section .btn-secondary {
+    /* already styled by general btn-secondary */
+}
+
+.promo-section .error-message,
+.promo-section .success-message {
+    margin-top: 0.5rem;
+}
+
+.checkout-button-container {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+.checkout-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* Styles for order-success.ejs */
+.order-success-container {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.order-success-container .section-title-success {
+    color: var(--success-color);
+}
+
+.order-details-card {
+    background: var(--secondary-bg);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    text-align: left;
+    border: 1px solid var(--border-color);
+}
+
+.order-details-card h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.order-details-card p {
+    margin-bottom: 0.5rem;
+}
+
+.order-items-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--accent-bg);
+    border-radius: 8px;
+}
+
+.order-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.order-item-info {
+    flex-grow: 1;
+}
+
+.order-item-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.order-item-info p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.order-actions-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Styles for account.ejs */
+.account-info-card {
+    text-align: left;
+}
+
+.account-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Styles for account/orders.ejs */
+.order-list-container {
+    padding: 2rem 0;
+}
+.order-card-account-orders {
+    background: var(--secondary-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+.order-card-account-orders h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+.order-card-account-orders p {
+    margin-bottom: 0.5rem;
+}
+.order-status-tracker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    position: relative;
+    padding: 1rem 0;
+}
+.order-status-tracker::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 0;
+}
+.order-status-tracker .progress-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2px;
+    background: var(--accent-color); /* Active line color */
+    z-index: 0;
+    transition: width 0.5s ease-in-out;
+}
+.status-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.status-dot {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    border: 2px solid var(--border-color);
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+.status-step.active .status-dot {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+.status-step.active .status-text {
+    color: var(--text-primary);
+    font-weight: bold;
+}
+.status-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Styles for marketplace/index.ejs */
+.marketplace-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Styles for marketplace/detail.ejs */
+.product-detail-container.marketplace {
+    display: flex;
+    gap: 2rem;
+}
+
+.product-detail-image.marketplace {
+    flex: 1;
+}
+
+.product-detail-image.marketplace img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.product-detail-info.marketplace {
+    flex: 1;
+}
+
+.product-detail-info.marketplace p {
+    margin-bottom: 1rem;
+}
+
+.marketplace-product-actions {
+    margin-top: 2rem;
+}
+
+.marketplace-chat-link {
+    margin-top: 1rem;
+}
+
+.marketplace-owner-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-danger:hover {
+    background-color: #dc2626; /* A slightly darker red */
+    transform: scale(1.02);
+}
+
+/* Styles for marketplace/new.ejs */
+.marketplace-new-listing-textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--accent-bg);
+    color: var(--text-primary);
+}
+
+.marketplace-new-listing-select {
+    width: 100%;
+}
+
+/* General form group styling */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.875rem;
+    background: var(--accent-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+}
+
+.admin-table-inline-form {
+    display: inline;
+}
+
+/* General table styling for admin pages */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    background: var(--secondary-bg);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners apply to children */
+    border: 1px solid var(--border-color);
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+    background: var(--accent-bg);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background: var(--hover-bg);
+}
+
+/* Styles for admin/settings.ejs */
+.admin-settings-form .promo-banner-input {
+    width: 100%;
+}
+
+.admin-settings-form .promo-banner-checkbox-wrapper {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.admin-settings-form .promo-banner-checkbox {
+    margin-right: 0.5rem;
+}
+
+/* Styles for admin promo forms (create and edit) */
+.admin-promo-form {
+    max-width: 600px;
+}
+
+/* Styles for marketplace/detail.ejs bid/offer forms */
+.marketplace-action-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.marketplace-action-form input[type="number"] {
+    flex-grow: 1;
+    padding: 0.875rem;
+    background: var(--accent-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.marketplace-action-form input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+}
+
+.marketplace-action-form .btn-primary {
+    flex-shrink: 0;
+    padding: 0.875rem 1.5rem;
+    margin-top: 0; /* Override auth-form margin-top if applied */
+}
+
+/* Styles for views/chat.ejs */
+#chat-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--secondary-bg);
+}
+#messages {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: var(--primary-bg);
+    border-radius: 8px;
+}
+.message {
+    margin-bottom: 0.5rem;
+}
+.message.own-message {
+    text-align: right;
+    color: var(--accent-color);
+}
+#chat-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+#message-input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--accent-bg);
+    color: var(--text-primary);
+}
+#chat-form button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-color);
+    color: white;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+

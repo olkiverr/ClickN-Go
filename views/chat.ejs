@@ -1,37 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat for <%= item.name %></title>
-    <link rel="stylesheet" href="/css/main.css">
-    <style>
-        #chat-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 8px;
-        }
-        #messages {
-            height: 400px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .message {
-            margin-bottom: 0.5rem;
-        }
-        .message.own-message {
-            text-align: right;
-            color: #007bff;
-        }
-    </style>
-</head>
-<body>
-    <%- include('partials/header') %>
 
+<main class="section-container">
     <div id="chat-container">
         <h2>Chat about: <%= item.name %></h2>
         <div id="messages">
@@ -48,8 +16,4 @@
             <button type="submit">Send</button>
         </form>
     </div>
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+</main>

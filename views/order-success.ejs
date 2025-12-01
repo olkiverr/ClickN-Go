@@ -1,110 +1,33 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success - ClickN'Go</title>
-    <link rel="icon" href="/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <style>
-        .order-success-container {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-        .order-success-container .section-title {
-            color: var(--success-color);
-        }
-        .order-details-card {
-            background: var(--secondary-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 800px;
-            text-align: left;
-            border: 1px solid var(--border-color);
-        }
-        .order-details-card h3 {
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        .order-details-card p {
-            margin-bottom: 0.5rem;
-        }
-        .order-items-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .order-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem;
-            background: var(--accent-bg);
-            border-radius: 8px;
-        }
-        .order-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 4px;
-        }
-        .order-item-info {
-            flex-grow: 1;
-        }
-        .order-item-info h4 {
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        .order-item-info p {
-            margin: 0;
-            color: var(--text-secondary);
-        }
-        .order-actions {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-    </style>
-</head>
-<body data-theme="dark">
-    <%- include('partials/header') %>
-    <main class="section-container order-success-container">
-        <h2 class="section-title">Order Placed Successfully!</h2>
-        <p class="section-subtitle">Thank you for your purchase. Your order details are below.</p>
+<main class="section-container order-success-container">
+    <h2 class="section-title section-title-success">Order Placed Successfully!</h2>
+    <p class="section-subtitle">Thank you for your purchase. Your order details are below.</p>
 
-        <div class="order-details-card">
-            <h3>Order #<%= order.id %></h3>
-            <p><strong>Total Price:</strong> $<%= parseFloat(order.total_price).toFixed(2) %></p>
-            <p><strong>Shipping Address:</strong> <%= order.shipping_address %>, <%= order.shipping_city %>, <%= order.shipping_zip %>, <%= order.shipping_country %></p>
-            <p><strong>Tracking Number:</strong> <%= order.tracking_number %></p>
-            <p><strong>Shipping Status:</strong> <%= order.shipping_status %></p>
-            <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleDateString() %></p>
+    <div class="order-details-card">
+        <h3>Order #<%= order.id %></h3>
+        <p><strong>Total Price:</strong> $<%= parseFloat(order.total_price).toFixed(2) %></p>
+        <p><strong>Shipping Address:</strong> <%= order.shipping_address %>, <%= order.shipping_city %>, <%= order.shipping_zip %>, <%= order.shipping_country %></p>
+        <p><strong>Tracking Number:</strong> <%= order.tracking_number %></p>
+        <p><strong>Shipping Status:</strong> <%= order.shipping_status %></p>
+        <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleDateString() %></p>
 
-            <h3>Items in your order:</h3>
-            <div class="order-items-grid">
-                <% orderItems.forEach(item => { %>
-                    <div class="order-item">
-                        <img src="<%= item.image_url || '/img/placeholder.jpg' %>" alt="<%= item.name %>">
-                        <div class="order-item-info">
-                            <h4><%= item.name %></h4>
-                            <p>Quantity: <%= item.quantity %></p>
-                            <p>Price: $<%= parseFloat(item.price).toFixed(2) %></p>
-                        </div>
+        <h3>Items in your order:</h3>
+        <div class="order-items-grid">
+            <% orderItems.forEach(item => { %>
+                <div class="order-item">
+                    <img src="<%= item.image_url || '/img/placeholder.jpg' %>" alt="<%= item.name %>">
+                    <div class="order-item-info">
+                        <h4><%= item.name %></h4>
+                        <p>Quantity: <%= item.quantity %></p>
+                        <p>Price: $<%= parseFloat(item.price).toFixed(2) %></p>
                     </div>
-                <% }) %>
-            </div>
+                </div>
+            <% }) %>
         </div>
+    </div>
 
-        <div class="order-actions">
-            <a href="/products" class="btn-primary">Continue Shopping</a>
-            <a href="/account" class="btn-secondary">View My Orders</a> <!-- To be implemented later -->
-        </div>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+    <div class="order-actions-container">
+        <a href="/products" class="btn-primary">Continue Shopping</a>
+        <a href="/account" class="btn-secondary">View My Orders</a> <!-- To be implemented later -->
+    </div>
+</main>

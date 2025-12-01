@@ -1,48 +1,33 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - ClickN'Go</title>
-    <link rel="icon" href="/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-theme="dark">
-    <%- include('partials/header') %>
-    <main class="section-container">
-        <h2 class="section-title">Create your account</h2>
-        <form action="/register" method="POST" class="auth-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+<main class="section-container">
+    <h2 class="section-title">Create your account</h2>
+    <form action="/register" method="POST" class="auth-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
 
-            <div style="display: flex; align-items: center; margin-top: 1rem;">
-                <input type="checkbox" id="agreeToTos" name="agreeToTos" required style="margin-right: 0.5rem;">
-                <label for="agreeToTos">I agree to the <a href="/tos" target="_blank" style="color: var(--accent-color); text-decoration: none;">Terms of Service</a></label>
-            </div>
+        <div style="display: flex; align-items: center; margin-top: 1rem;">
+            <input type="checkbox" id="agreeToTos" name="agreeToTos" required style="margin-right: 0.5rem;">
+            <label for="agreeToTos">I agree to the <a href="/tos" target="_blank" style="color: var(--accent-color); text-decoration: none;">Terms of Service</a></label>
+        </div>
 
-            <button type="submit" class="btn-primary" id="registerButton" disabled>Register</button>
-        </form>
-    </main>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const agreeToTosCheckbox = document.getElementById('agreeToTos');
-            const registerButton = document.getElementById('registerButton');
+        <button type="submit" class="btn-primary" id="registerButton" disabled>Register</button>
+    </form>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const agreeToTosCheckbox = document.getElementById('agreeToTos');
+        const registerButton = document.getElementById('registerButton');
 
-            if (agreeToTosCheckbox && registerButton) {
-                agreeToTosCheckbox.addEventListener('change', () => {
-                    registerButton.disabled = !agreeToTosCheckbox.checked;
-                });
-            }
-        });
-    </script>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+        if (agreeToTosCheckbox && registerButton) {
+            agreeToTosCheckbox.addEventListener('change', () => {
+                registerButton.disabled = !agreeToTosCheckbox.checked;
+            });
+        }
+    });
+</script>

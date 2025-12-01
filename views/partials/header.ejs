@@ -9,15 +9,15 @@
         <!-- Logo -->
         <a href="/" class="logo">
             <div class="logo-icon">
-                <img src="/img/logo.png" alt="ClickN'Go Logo" style="height: 36px;">
+                <img src="/img/logo.png" alt="ClickN'Go Logo" class="logo-icon-img">
             </div>
             ClickN'Go
         </a>
 
         <!-- Search Bar -->
         <div class="search-container">
-            <form action="/products" method="GET" style="display: flex; width: 100%;">
-                <div style="display: flex; flex-grow: 1; position: relative;">
+            <form action="/products" method="GET" class="search-form">
+                <div class="search-input-wrapper">
                     <div class="search-icon">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/>
@@ -28,13 +28,13 @@
                 </div>
                 
                 <details class="filter-dropdown">
-                    <summary class="action-btn" style="margin-left: 0.5rem; height: 46px; width: 46px; display: flex; align-items: center; justify-content: center;">
+                    <summary class="action-btn filter-summary-btn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 3H2l8 9.46V21l4-2v-7.54L22 3z"/>
                         </svg>
                     </summary>
                     <div class="dropdown-content">
-                        <select name="tag" class="search-bar" style="margin-bottom: 0.5rem;">
+                        <select name="tag" class="search-bar dropdown-content search-bar-mb-half">
                             <option value="">All Categories</option>
                             <option value="CPU" <%= typeof selectedTag !== 'undefined' && selectedTag === 'CPU' ? 'selected' : '' %>>CPU</option>
                             <option value="GPU" <%= typeof selectedTag !== 'undefined' && selectedTag === 'GPU' ? 'selected' : '' %>>GPU</option>
@@ -42,12 +42,12 @@
                             <option value="SSD" <%= typeof selectedTag !== 'undefined' && selectedTag === 'SSD' ? 'selected' : '' %>>SSD</option>
                             <option value="Software" <%= typeof selectedTag !== 'undefined' && selectedTag === 'Software' ? 'selected' : '' %>>Software</option>
                         </select>
-                        <input type="number" name="minPrice" placeholder="Min Price" value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>" class="search-bar" style="margin-bottom: 0.5rem;">
+                        <input type="number" name="minPrice" placeholder="Min Price" value="<%= typeof minPrice !== 'undefined' ? minPrice : '' %>" class="search-bar dropdown-content search-bar-mb-half">
                         <input type="number" name="maxPrice" placeholder="Max Price" value="<%= typeof maxPrice !== 'undefined' ? maxPrice : '' %>" class="search-bar">
-                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Apply Filters</button>
+                        <button type="submit" class="btn-primary dropdown-content btn-primary-mt-one">Apply Filters</button>
                     </div>
                 </details>
-                <button type="submit" class="action-btn" style="margin-left: 0.5rem; height: 46px; width: 46px; display: flex; align-items: center; justify-content: center;">
+                <button type="submit" class="action-btn search-button-header">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="M21 21l-4.35-4.35"/>

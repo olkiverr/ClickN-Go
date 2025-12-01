@@ -1,33 +1,20 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - ClickN'Go</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
-    <%- include('partials/header') %>
-    <main class="section-container">
-        <h2 class="section-title">Shipping Information</h2>
-        
-        <form action="/cart/checkout" method="POST" class="auth-form">
-            <label for="address">Address</label>
-            <input type="text" id="address" name="shipping_address" value="<%= shippingInfo.shipping_address || '' %>" required>
+<main class="section-container">
+    <h2 class="section-title">Shipping Information</h2>
+    
+    <form action="/cart/checkout" method="POST" class="auth-form">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="shipping_address" value="<%= shippingInfo.shipping_address || '' %>" required>
 
-            <label for="city">City</label>
-            <input type="text" id="city" name="shipping_city" value="<%= shippingInfo.shipping_city || '' %>" required>
+        <label for="city">City</label>
+        <input type="text" id="city" name="shipping_city" value="<%= shippingInfo.shipping_city || '' %>" required>
 
-            <label for="zip">Zip Code</label>
-            <input type="text" id="zip" name="shipping_zip" value="<%= shippingInfo.shipping_zip || '' %>" required>
+        <label for="zip">Zip Code</label>
+        <input type="text" id="zip" name="shipping_zip" value="<%= shippingInfo.shipping_zip || '' %>" required>
 
-            <label for="country">Country</label>
-            <input type="text" id="country" name="shipping_country" value="<%= shippingInfo.shipping_country || '' %>" required>
+        <label for="country">Country</label>
+        <input type="text" id="country" name="shipping_country" value="<%= shippingInfo.shipping_country || '' %>" required>
 
-            <button type="submit" class="btn-primary">Continue to Review</button>
-        </form>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+        <button type="submit" class="btn-primary">Continue to Review</button>
+    </form>
+</main>

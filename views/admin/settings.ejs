@@ -1,32 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Site Settings</title>
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body data-theme="dark">
-    <%- include('../partials/header') %>
+<div class="section-container">
+    <h1 class="section-title">Site Settings</h1>
 
-    <div class="section-container">
-        <h1 class="section-title">Site Settings</h1>
-
-        <form action="/admin/settings" method="POST" class="auth-form">
-            <h2>Promotional Banner</h2>
-            <div style="margin-bottom: 1rem;">
-                <label for="promo_banner_text">Banner Text</label>
-                <input type="text" id="promo_banner_text" name="promo_banner_text" value="<%= settings.promo_banner_text || '' %>" class="search-bar" style="width: 100%;">
-            </div>
-            <div style="margin-bottom: 1rem; display: flex; align-items: center;">
-                <input type="checkbox" id="promo_banner_active" name="promo_banner_active" <%= settings.promo_banner_active === 'true' ? 'checked' : '' %> style="margin-right: 0.5rem;">
-                <label for="promo_banner_active">Enable Banner</label>
-            </div>
-            <button type="submit" class="btn-primary">Save Settings</button>
-        </form>
-    </div>
-
-    <script src="/js/main.js"></script>
-</body>
-</html>
+            <form action="/admin/settings" method="POST" class="auth-form admin-settings-form">
+                <h2>Promotional Banner</h2>
+                <div class="form-group">
+                    <label for="promo_banner_text">Banner Text</label>
+                    <input type="text" id="promo_banner_text" name="promo_banner_text" value="<%= settings.promo_banner_text || '' %>" class="search-bar promo-banner-input">
+                </div>
+                <div class="promo-banner-checkbox-wrapper">
+                    <input type="checkbox" id="promo_banner_active" name="promo_banner_active" <%= settings.promo_banner_active === 'true' ? 'checked' : '' %> class="promo-banner-checkbox">
+                    <label for="promo_banner_active">Enable Banner</label>
+                </div>        <button type="submit" class="btn-primary">Save Settings</button>
+    </form>
+</div>

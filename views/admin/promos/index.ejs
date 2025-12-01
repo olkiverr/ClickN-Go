@@ -1,93 +1,78 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Promos - ClickN'Go Admin</title>
-    <link rel="icon" href="/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="/css/theme.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <style>
-        .promo-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-        }
-        .promo-table th, .promo-table td {
-            border: 1px solid var(--border-color);
-            padding: 0.8rem;
-            text-align: left;
-        }
-        .promo-table th {
-            background-color: var(--accent-bg);
-            color: var(--text-primary);
-        }
-        .promo-table tr:nth-child(even) {
-            background-color: var(--secondary-bg);
-        }
-        .promo-table tr:hover {
-            background-color: var(--accent-bg);
-        }
-        .promo-actions a, .promo-actions button {
-            margin-right: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .promo-actions .edit-btn { background-color: var(--accent-color); color: white; border: none; }
-        .promo-actions .delete-btn { background-color: var(--danger-color); color: white; border: none; }
-        .promo-actions .edit-btn:hover, .promo-actions .delete-btn:hover { opacity: 0.9; }
-    </style>
-</head>
-<body data-theme="dark">
-    <%- include('../../partials/header') %>
-    <main class="section-container">
-        <h2 class="section-title">Manage Promotions</h2>
-        <a href="/admin/promos/create" class="btn-primary" style="margin-bottom: 1.5rem; display: inline-block;">Create New Promo</a>
+<main class="section-container">
+    <h2 class="section-title">Manage Promotions</h2>
+    <a href="/admin/promos/create" class="btn-primary" style="margin-bottom: 1.5rem; display: inline-block;">Create New Promo</a>
 
-        <% if (promos.length === 0) { %>
-            <p>No promotions found.</p>
-        <% } else { %>
-            <table class="promo-table">
-                <thead>
+    <% if (promos.length === 0) { %>
+        <p>No promotions found.</p>
+    <% } else { %>
+        <table class="promo-table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                    <th>Applies To</th>
+                    <th>Expires</th>
+                    <th>Usage Limit</th>
+                    <th>Used</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% promos.forEach(promo => { %>
                     <tr>
-                        <th>Code</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>Applies To</th>
-                        <th>Expires</th>
-                        <th>Usage Limit</th>
-                        <th>Used</th>
-                        <th>Active</th>
-                        <th>Actions</th>
+                        <td><%= promo.code || 'N/A' %></td>
+                        <td><%= promo.type %></td>
+                        <td><%= promo.value_type === 'percentage' ? (promo.value * 100) + '%' : '$' + promo.value.toFixed(2) %></td>
+                        <td><%= promo.applies_to || 'Global' %></td>
+                        <td><%= promo.expiration_date ? new Date(promo.expiration_date).toLocaleDateString() : 'Never' %></td>
+                        <td><%= promo.usage_limit || 'Unlimited' %></td>
+                        <td><%= promo.used_count %></td>
+                        <td><%= promo.is_active ? 'Yes' : 'No' %></td>
+                        <td class="promo-actions">
+                            <a href="/admin/promos/edit/<%= promo.id %>" class="edit-btn">Edit</a>
+                            <a href="/admin/promos/<%= promo.id %>/orders" class="btn-secondary">View Orders</a>
+                            <form action="/admin/promos/delete/<%= promo.id %>" method="POST" style="display: inline;">
+                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this promo?');">Delete</button>
+                            </form>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% promos.forEach(promo => { %>
-                        <tr>
-                            <td><%= promo.code || 'N/A' %></td>
-                            <td><%= promo.type %></td>
-                            <td><%= promo.value_type === 'percentage' ? (promo.value * 100) + '%' : '$' + promo.value.toFixed(2) %></td>
-                            <td><%= promo.applies_to || 'Global' %></td>
-                            <td><%= promo.expiration_date ? new Date(promo.expiration_date).toLocaleDateString() : 'Never' %></td>
-                            <td><%= promo.usage_limit || 'Unlimited' %></td>
-                            <td><%= promo.used_count %></td>
-                            <td><%= promo.is_active ? 'Yes' : 'No' %></td>
-                            <td class="promo-actions">
-                                <a href="/admin/promos/edit/<%= promo.id %>" class="edit-btn">Edit</a>
-                                <a href="/admin/promos/<%= promo.id %>/orders" class="btn-secondary">View Orders</a>
-                                <form action="/admin/promos/delete/<%= promo.id %>" method="POST" style="display: inline;">
-                                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this promo?');">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        <% } %>
-    </main>
-    <script src="/js/main.js"></script>
-</body>
-</html>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</main>
+<style>
+    .promo-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+    }
+    .promo-table th, .promo-table td {
+        border: 1px solid var(--border-color);
+        padding: 0.8rem;
+        text-align: left;
+    }
+    .promo-table th {
+        background-color: var(--accent-bg);
+        color: var(--text-primary);
+    }
+    .promo-table tr:nth-child(even) {
+        background-color: var(--secondary-bg);
+    }
+    .promo-table tr:hover {
+        background-color: var(--accent-bg);
+    }
+    .promo-actions a, .promo-actions button {
+        margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .promo-actions .edit-btn { background-color: var(--accent-color); color: white; border: none; }
+    .promo-actions .delete-btn { background-color: var(--danger-color); color: white; border: none; }
+    .promo-actions .edit-btn:hover, .promo-actions .delete-btn:hover { opacity: 0.9; }
+</style>

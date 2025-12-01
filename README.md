@@ -62,11 +62,14 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_DATABASE=clickngo
+PORT=3000
 ```
 *   **DB_HOST**: Your database host (e.g., `localhost`).
 *   **DB_USER**: Your database username.
 *   **DB_PASSWORD**: Your database password.
 *   **DB_DATABASE**: The name of your database.
+*   **PORT**: The port the Node.js server will listen on. Defaults to `3000`.
+*   **DB_PORT**: The port your database server is listening on. Defaults to `3306`.
 
 ### Prerequisites
 *   Node.js (LTS version recommended)
@@ -136,8 +139,9 @@ npm start
 ### 5. Access the Application
 Open your web browser and navigate to:
 ```
-http://localhost:3000
+http://localhost:[PORT]
 ```
+(Replace `[PORT]` with your configured port, or `3000` if not specified.)
 
 ## Admin Access
 To access the admin panel, log in with the default admin credentials (`admin@gmail.com` / `admin`). You will be forced to change your password and username/email on first login. After that, an "Admin Panel" link will appear in the header.
